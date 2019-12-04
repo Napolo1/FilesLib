@@ -91,11 +91,43 @@ $('#dirEntries').html(fl);
 $.mobile.changePage("#dirList", "slide", false, true);
 }
 //********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************//
+function processEntry(theEntry) {
+var fi = "";
+fi += '<p><b>Name</b>: ' + theEntry.name + '</p>';
+fi += '<p><b>Full Path</b>: ' + theEntry.fullPath + '</p>';
+fi += '<p><b>URI</b>: ' + theEntry.toURI() + '</p>';
+if(theEntry.isFile == true) {
+fi += '<p>The entry is a file</p>';
+} else {
+fi += '<p>The entry is a directory</p>';
+}
+//Update the page content with information about the file
+$('#fileInfo').html(fi);
+//Display the directory entries page
+$.mobile.changePage("#fileDetails", "slide", false, true);
+}
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************//
+function onGetMetadataSuccess(metadata) {
+alert("File Modification Time:" + metadata.modificationTime);
+}
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************//
+function onGetMetadataSuccess(metadata) {
+var md = '';
+for(aKey in metadata) {
+md += '<b>' + aKey + '</b>: ' + metadata[aKey] + br;
+}
+md += hr;
+//Update the page content with information about the file
+$('#fileMetadata').html(md);
+}
+//********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************//
+
 </script>
   </head>
   <body onload="onBodyLoad ()">
     <center>
     <br>
+
   <section id="dirList" data-role="page" data-add-back-btn="true">
 <header data-role="header">
 <h1>File API Demo</h1>
@@ -109,6 +141,26 @@ class="ui-btn-right">Write</a>
 <div id="writeInfo"></div>
 </div>
 </section>
+
+<section id="fileDetails" data-role="page"
+data-add-back-btn="true">
+<header data-role="header">
+<h1>File API Demo</h1>
+</header>
+<div data-role="content">
+<p><em>Directory Entry Information</em></p>
+<hr />
+<div id="fileInfo"></div>
+<hr />
+<p><em>File Metadata:</em></p>
+<div id="fileMetadata"></div>
+<input type="button" value="View File"
+onclick="viewFile();">
+<input type="button" value="Remove File"
+onclick="removeFile();">
+</div>
+</section>
+
     </center>
   </body>
 </html>
